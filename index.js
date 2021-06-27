@@ -16,6 +16,7 @@ let SCORE = 0;
 const SCORE_UNIT = 10;
 let LEVEL = 1;
 const MAX_LEVEL = 5;
+
 let GAME_OVER = false;
 let leftArrow = false;
 let rightArrow = false;
@@ -147,7 +148,7 @@ function resetGame() {
 // CREATE THE BRICKS
 const brick = {
   row: 1,
-  column: 1,
+  column: 5,
   width: 55,
   height: 20,
   offSetLeft: 40,
@@ -205,7 +206,8 @@ function drawBricks() {
         canvasContext.fillStyle = b.fillColor;
         canvasContext.fillRect(b.x, b.y, brick.width, brick.height);
 
-        canvasContext.strokeStyle = brick.b;
+        canvasContext.strokeStyle = b.strokeColor;
+
         canvasContext.strokeRect(b.x, b.y, brick.width, brick.height);
       }
     }
