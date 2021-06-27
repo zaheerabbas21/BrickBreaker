@@ -2,96 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="styles.css">
-    <title>2D Breakout Game - JavScript</title>
-    <link
-      rel="stylesheet"
-      href="http://fonts.googleapis.com/css?family=Germania+One"
-    />
-
-    <style>
-      * {
-        font-family: "Germania One";
-      }
-      #sound {
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-        position: absolute;
-        top: 465px;
-        left: 15px;
-      }
-      #gameover {
-        position: absolute;
-        width: 400px;
-        height: 500px;
-        background: rgba(0, 0, 0, 0.5);
-        display: none;
-      }
-      #youwon {
-        width: 100px;
-        position: absolute;
-        top: 200px;
-        left: 150px;
-        display: none;
-      }
-      #youlose {
-        width: 400px;
-        position: absolute;
-        top: 100px;
-        left: 0px;
-        display: none;
-      }
-      #restart {
-        position: absolute;
-        top: 310px;
-        left: 155px;
-        cursor: pointer;
-        font-size: 1.25em;
-        color: #fff;
-      }
-      canvas {
-        margin-left:36%;
-        /* margin-top:5%; */
-        width:30vw;
-        height:100vh;
-        /* background:transparent; */
-        opacity: 0.7;
-      }
-    #scream {
-    width: 30vw;
-    height: 100vh;
-    position: absolute;
-    left:36.25%;
-    z-index:-1;
-    /* top:5%; */
-}
-
-#canvas {
-    margin-top: -212px;
-}
-/* img{
-  width:400;
-  height:400;
-  position: absolute;
-  z-index: 9;
-} */
-    </style>
+    <title>Brick Breaker</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="sound">
-      <img src="img/SOUND_ON.png" alt="" id="sound" />
+    <div class="container">
+      <div class="brick-breaker">
+        <img src="img/bg3.svg">
+        <canvas id="game" width="500px" height="600px"></canvas>
+      </div>
     </div>
-
-    <div id="gameover">
-      <img src="img/youwon.png" alt="" id="youwon" />
-      <img src="img/gameover.png" alt="" id="youlose" />
-      <div id="restart">Play Again!</div>
-    </div>
-    <img id="scream" src="img/spaceimg.gif" alt="The Scream">
-    <canvas id="breakout" width="400" height="500"></canvas>
-
-    <script src="components.js"></script>
-    <script src="game.js"></script>
+    <script src="index.js"></script>
   </body>
 </html>
