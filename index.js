@@ -105,20 +105,20 @@ function movePaddle() {
 
 // BALL AND WALL COLLISION DETECTION
 function ballWallCollision() {
-  if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+  if (ball.x + ball.radius >= canvas.width || ball.x - ball.radius <= 0) {
     ball.dx = -ball.dx;
-    // WALL_HIT.play();
+    WALL_HIT.play();
   }
 
   if (ball.y - ball.radius < 0) {
     ball.dy = -ball.dy;
-    // WALL_HIT.play();
+    WALL_HIT.play();
   }
 
-  if (ball.y + ball.radius > canvas.height) {
+  if (ball.y + ball.radius >= canvas.height - PADDLE_MARGIN_BOTTOM) {
     LIFE--; // LOSE LIFE
-    // LIFE_LOST.play();
-    setTimeout(resetGame, 1000);
+    LIFE_LOST.play();
+    setTimeout(resetGame, 500);
   }
 }
 
@@ -130,6 +130,8 @@ function ballPaddleCollision() {
     paddle.y < paddle.y + paddle.height &&
     ball.y > paddle.y
   ) {
+    PADDLE_HIT.play();
+
     // CHECK WHERE THE BALL HIT THE PADDLE
     let collidePoint = ball.x - (paddle.x + paddle.width / 2);
 
@@ -236,7 +238,7 @@ function ballBrickCollision() {
           b.strength -= 1;
           b.fillColor = colors[b.strength];
           if (b.strength <= 0) {
-            // BRICK_HIT.play();
+            BRICK_HIT.play();
             ball.dy = -ball.dy;
             b.status = false; // the brick is broken
             SCORE += SCORE_UNIT;
@@ -280,22 +282,6 @@ document.addEventListener("keyup", function (event) {
   }
 });
 
-// document.addEventListener("mousemove", function (event) {
-//   if (event.clientX + paddle.width > 200 && event.clientX < canvas.width)
-//     movePaddleWithMouse(event.clientX);
-// });
-
-// // MOVE PADDLE
-// function movePaddleWithMouse(changeX) {
-//   if (paddle.x >= 0 && paddle.x + paddle.width <= canvas.width) {
-//     paddle.x = changeX - paddle.width;
-//   } else if (paddle.x <= 0) {
-//     paddle.x = 1;
-//   } else if (paddle.x + paddle.width >= canvas.width) {
-//     paddle.x = canvas.width - paddle.width;
-//   }
-// }
-
 function levelUp() {
   let isLevelDone = true;
 
@@ -307,10 +293,10 @@ function levelUp() {
   }
 
   if (isLevelDone) {
-    // WIN.play();
+    WIN.play();
 
     if (LEVEL >= MAX_LEVEL) {
-      // showYouWin();
+      showYouWin();
       GAME_OVER = true;
       return;
     }
@@ -369,7 +355,10 @@ function loop() {
   if (isPaused) {
     update();
   }
-  requestAnimationFrame(loop);
+
+  if (!GAME_OVER) {
+    requestAnimationFrame(loop);
+  }
 }
 
 loop();
@@ -378,3 +367,64 @@ const pauseBtn = document.getElementById("pause");
 pauseBtn.addEventListener("click", () => {
   isPaused = !isPaused;
 });
+
+// SELECT SOUND ELEMENT
+const soundElement = document.getElementById("sound");
+
+soundElement.addEventListener("click", audioManager);
+
+function audioManager() {
+  // CHANGE IMAGE SOUND_ON/OFF
+  let imgSrc = soundElement.getAttribute("src");
+  let SOUND_IMG =
+    imgSrc == "img/SOUND_ON.png" ? "img/SOUND_OFF.png" : "img/SOUND_ON.png";
+
+  soundElement.setAttribute("src", SOUND_IMG);
+
+  // MUTE AND UNMUTE SOUNDS
+  WALL_HIT.muted = WALL_HIT.muted ? false : true;
+  PADDLE_HIT.muted = PADDLE_HIT.muted ? false : true;
+  BRICK_HIT.muted = BRICK_HIT.muted ? false : true;
+  WIN.muted = WIN.muted ? false : true;
+  LIFE_LOST.muted = LIFE_LOST.muted ? false : true;
+}
+
+// SHOW GAME OVER MESSAGE
+/* SELECT ELEMENTS */
+const gameover = document.getElementById("gameover");
+const youwin = document.getElementById("youwin");
+const youlose = document.getElementById("youlose");
+const restart = document.getElementById("restart");
+
+// CLICK ON PLAY AGAIN BUTTON
+restart.addEventListener("click", function () {
+  location.reload(); // reload the page
+});
+
+// SHOW YOU WIN
+function showYouWin() {
+  gameover.style.display = "block";
+  youwon.style.display = "block";
+}
+
+// SHOW YOU LOSE
+function showYouLose() {
+  gameover.style.display = "block";
+  youlose.style.display = "block";
+}
+
+// document.addEventListener("mousemove", function (event) {
+//   if (event.clientX + paddle.width > 200 && event.clientX < canvas.width)
+//     movePaddleWithMouse(event.clientX);
+// });
+
+// // MOVE PADDLE
+// function movePaddleWithMouse(changeX) {
+//   if (paddle.x >= 0 && paddle.x + paddle.width <= canvas.width) {
+//     paddle.x = changeX - paddle.width;
+//   } else if (paddle.x <= 0) {
+//     paddle.x = 1;
+//   } else if (paddle.x + paddle.width >= canvas.width) {
+//     paddle.x = canvas.width - paddle.width;
+//   }
+// }
