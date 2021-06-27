@@ -11,20 +11,12 @@ body {
 }
 
 .container {
-  width: 51vw;
+  width: 500px;
   height: 100vh;
-  margin: auto;
-  /* background-color: #fff; */
+  margin: 0 auto;
+  /* background-image: url(img/bg3.svg); */
 }
+
 img {
-  /* width: 500px; */
-  height: 100vh;
-  position: absolute;
-  /* left: 31.7%; */
-  z-index: -1;
-  background-position: center;
-}
-canvas {
-  width: 51vw;
-  height: 100vh;
+  width: 100%;
 }

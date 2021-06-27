@@ -16,6 +16,7 @@ let SCORE = 0;
 const SCORE_UNIT = 10;
 let LEVEL = 1;
 const MAX_LEVEL = 5;
+
 let GAME_OVER = false;
 let leftArrow = false;
 let rightArrow = false;
@@ -32,9 +33,9 @@ let ball = {
   x: canvas.width / 2,
   y: paddle.y - BALL_RADIUS,
   radius: BALL_RADIUS,
-  speed: 5,
+  speed: 7,
   dx: 3 * (Math.random() * 2 - 1),
-  dy: -3 * (Math.random() * 2 - 1),
+  dy: -3,
 };
 
 // DRAW THE BALL
@@ -127,14 +128,10 @@ function ballPaddleCollision() {
 
 // RESET THE BALL
 function resetGame() {
-  ball = {
-    x: canvas.width / 2,
-    y: paddle.y - BALL_RADIUS,
-    radius: BALL_RADIUS,
-    speed: 5,
-    dx: 3 * (Math.random() * 2 - 1),
-    dy: -3 * (Math.random() * 2 - 1),
-  };
+  ball.x = canvas.width / 2;
+  ball.y = paddle.y - BALL_RADIUS;
+  ball.dx = 3 * (Math.random() * 2 - 1);
+  ball.dy = -3;
   paddle = {
     x: canvas.width / 2 - PADDLE_WIDTH / 2,
     y: canvas.height - PADDLE_MARGIN_BOTTOM - PADDLE_HEIGHT,
