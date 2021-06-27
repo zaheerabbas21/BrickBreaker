@@ -16,7 +16,6 @@ let SCORE = 0;
 const SCORE_UNIT = 10;
 let LEVEL = 1;
 const MAX_LEVEL = 5;
-
 let GAME_OVER = false;
 let leftArrow = false;
 let rightArrow = false;
