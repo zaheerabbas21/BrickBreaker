@@ -35,7 +35,7 @@ let ball = {
   radius: BALL_RADIUS,
   speed: 5,
   dx: 3 * (Math.random() * 2 - 1),
-  dy: -3,
+  dy: -3 * (Math.random() * 2 - 1),
 };
 
 // DRAW THE BALL
@@ -134,7 +134,7 @@ function resetGame() {
     radius: BALL_RADIUS,
     speed: 5,
     dx: 3 * (Math.random() * 2 - 1),
-    dy: -3,
+    dy: -3 * (Math.random() * 2 - 1),
   };
   paddle = {
     x: canvas.width / 2 - PADDLE_WIDTH / 2,
@@ -147,7 +147,7 @@ function resetGame() {
 
 // CREATE THE BRICKS
 const brick = {
-  row: 1,
+  row: LEVEL,
   column: 5,
   width: 55,
   height: 20,
@@ -169,26 +169,9 @@ function createBricks() {
           brick.offSetTop +
           brick.marginTop,
         status: true,
-        stregnth: 2,
+        strength: LEVEL,
         fillColor: "#2e3548",
         strokeColor: "yellow",
-      };
-    }
-  }
-
-  for (let r = 1; r < brick.row; r++) {
-    bricks[r] = [];
-    for (let c = 0; c < brick.column; c++) {
-      bricks[r][c] = {
-        x: c * (brick.offSetLeft + brick.width) + brick.offSetLeft,
-        y:
-          r * (brick.offSetTop + brick.height) +
-          brick.offSetTop +
-          brick.marginTop,
-        status: true,
-        stregnth: 1,
-        fillColor: "red",
-        strokeColor: "#FFF",
       };
     }
   }
@@ -227,26 +210,13 @@ function ballBrickCollision() {
           ball.y + ball.radius > b.y &&
           ball.y - ball.radius < b.y + brick.height
         ) {
-          b.stregnth -= 1;
-          console.log(b.stregnth);
-          if (b.stregnth <= 0) {
+          b.strength -= 1;
+          if (b.strength <= 0) {
             // BRICK_HIT.play();
             ball.dy = -ball.dy;
             b.status = false; // the brick is broken
             SCORE += SCORE_UNIT;
           } else {
-            console.log("Cas");
-            // let collidePoint = ball.x - (b.x + b.width / 2);
-
-            // // NORMALIZE THE VALUES
-            // collidePoint = collidePoint / (b.width / 2);
-
-            // // CALCULATE THE ANGLE OF THE BALL
-            // let angle = (collidePoint * Math.PI) / 3;
-
-            // ball.dx = ball.speed * Math.sin(angle);
-            // ball.dy = -ball.speed * Math.cos(angle);
-
             ball.dx = -ball.dx;
             ball.dy = -ball.dy;
           }
@@ -289,15 +259,14 @@ function levelUp() {
     // WIN.play();
 
     if (LEVEL >= MAX_LEVEL) {
-      showYouWin();
+      // showYouWin();
       GAME_OVER = true;
       return;
     }
-    brick.row++;
+    LEVEL++;
     createBricks();
     ball.speed += 0.5;
     resetGame();
-    LEVEL++;
   }
 }
 
