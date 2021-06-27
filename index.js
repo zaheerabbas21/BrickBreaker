@@ -8,14 +8,15 @@ canvasContext.lineWidth = 0.5;
 // GAME VARIABLES AND CONSTANTS
 const PADDLE_WIDTH = 120;
 const PADDLE_MARGIN_BOTTOM = 50;
-const PADDLE_HEIGHT = 30;
+const PADDLE_HEIGHT = 40;
 const BALL_RADIUS = 12;
 
 let LIFE = 3; // PLAYER HAS 3 LIVES
 let SCORE = 0;
 const SCORE_UNIT = 10;
 let LEVEL = 1;
-const MAX_LEVEL = 3;
+const MAX_LEVEL = 5;
+
 let GAME_OVER = false;
 let leftArrow = false;
 let rightArrow = false;
@@ -150,11 +151,9 @@ const brick = {
   column: 5,
   width: 55,
   height: 20,
-  offSetLeft: 10,
+  offSetLeft: 40,
   offSetTop: 20,
   marginTop: 40,
-  fillColor: "#2e3548",
-  strokeColor: "#FFF",
 };
 
 let bricks = [];
@@ -170,6 +169,26 @@ function createBricks() {
           brick.offSetTop +
           brick.marginTop,
         status: true,
+        stregnth: 2,
+        fillColor: "#2e3548",
+        strokeColor: "yellow",
+      };
+    }
+  }
+
+  for (let r = 1; r < brick.row; r++) {
+    bricks[r] = [];
+    for (let c = 0; c < brick.column; c++) {
+      bricks[r][c] = {
+        x: c * (brick.offSetLeft + brick.width) + brick.offSetLeft,
+        y:
+          r * (brick.offSetTop + brick.height) +
+          brick.offSetTop +
+          brick.marginTop,
+        status: true,
+        stregnth: 1,
+        fillColor: "red",
+        strokeColor: "#FFF",
       };
     }
   }
@@ -184,10 +203,11 @@ function drawBricks() {
       let b = bricks[r][c];
       // if the brick isn't broken
       if (b.status) {
-        canvasContext.fillStyle = brick.fillColor;
+        canvasContext.fillStyle = b.fillColor;
         canvasContext.fillRect(b.x, b.y, brick.width, brick.height);
 
-        canvasContext.strokeStyle = brick.strokeColor;
+        canvasContext.strokeStyle = b.strokeColor;
+
         canvasContext.strokeRect(b.x, b.y, brick.width, brick.height);
       }
     }
@@ -207,10 +227,29 @@ function ballBrickCollision() {
           ball.y + ball.radius > b.y &&
           ball.y - ball.radius < b.y + brick.height
         ) {
-          // BRICK_HIT.play();
-          ball.dy = -ball.dy;
-          b.status = false; // the brick is broken
-          SCORE += SCORE_UNIT;
+          b.stregnth -= 1;
+          console.log(b.stregnth);
+          if (b.stregnth <= 0) {
+            // BRICK_HIT.play();
+            ball.dy = -ball.dy;
+            b.status = false; // the brick is broken
+            SCORE += SCORE_UNIT;
+          } else {
+            console.log("Cas");
+            // let collidePoint = ball.x - (b.x + b.width / 2);
+
+            // // NORMALIZE THE VALUES
+            // collidePoint = collidePoint / (b.width / 2);
+
+            // // CALCULATE THE ANGLE OF THE BALL
+            // let angle = (collidePoint * Math.PI) / 3;
+
+            // ball.dx = ball.speed * Math.sin(angle);
+            // ball.dy = -ball.speed * Math.cos(angle);
+
+            ball.dx = -ball.dx;
+            ball.dy = -ball.dy;
+          }
         }
       }
     }
@@ -236,12 +275,45 @@ document.addEventListener("keyup", function (event) {
   }
 });
 
+function levelUp() {
+  let isLevelDone = true;
+
+  // check if all the bricks are broken
+  for (let r = 0; r < brick.row; r++) {
+    for (let c = 0; c < brick.column; c++) {
+      isLevelDone = isLevelDone && !bricks[r][c].status;
+    }
+  }
+
+  if (isLevelDone) {
+    // WIN.play();
+
+    if (LEVEL >= MAX_LEVEL) {
+      showYouWin();
+      GAME_OVER = true;
+      return;
+    }
+    brick.row++;
+    createBricks();
+    ball.speed += 0.5;
+    resetGame();
+    LEVEL++;
+  }
+}
+
+function showYouWin() {
+  setTimeout(() => {
+    alert("Congrats!!");
+  }, 1000);
+}
+
 function update() {
   movePaddle();
   moveBall();
   ballWallCollision();
   ballPaddleCollision();
   ballBrickCollision();
+  levelUp();
 }
 
 function draw() {
