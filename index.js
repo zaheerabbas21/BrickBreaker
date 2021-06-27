@@ -42,7 +42,7 @@ function drawBall() {
   canvasContext.beginPath();
 
   canvasContext.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-  canvasContext.fillStyle = "#C0C0C0";
+  canvasContext.fillStyle = "#ffcd05";
   canvasContext.fill();
 
   canvasContext.strokeStyle = "#2e3548";
@@ -147,7 +147,7 @@ function resetGame() {
 // CREATE THE BRICKS
 const brick = {
   row: 1,
-  column: 1,
+  column: 5,
   width: 55,
   height: 20,
   offSetLeft: 40,
@@ -169,7 +169,7 @@ function createBricks() {
           brick.marginTop,
         status: true,
         stregnth: 2,
-        fillColor: "white",
+        fillColor: "#2e3548",
         strokeColor: "yellow",
       };
     }
@@ -205,7 +205,8 @@ function drawBricks() {
         canvasContext.fillStyle = b.fillColor;
         canvasContext.fillRect(b.x, b.y, brick.width, brick.height);
 
-        canvasContext.strokeStyle = brick.b;
+        canvasContext.strokeStyle = b.strokeColor;
+
         canvasContext.strokeRect(b.x, b.y, brick.width, brick.height);
       }
     }
@@ -287,7 +288,7 @@ function levelUp() {
     // WIN.play();
 
     if (LEVEL >= MAX_LEVEL) {
-      // showYouWin();
+      showYouWin();
       GAME_OVER = true;
       return;
     }
