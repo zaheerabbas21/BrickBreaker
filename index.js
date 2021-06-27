@@ -21,6 +21,33 @@ let GAME_OVER = false;
 let leftArrow = false;
 let rightArrow = false;
 
+const BG_IMG = new Image();
+BG_IMG.src = "img/bg.jpg";
+
+const LEVEL_IMG = new Image();
+LEVEL_IMG.src = "img/level.png";
+
+const LIFE_IMG = new Image();
+LIFE_IMG.src = "img/life.png";
+
+const SCORE_IMG = new Image();
+SCORE_IMG.src = "img/score.png";
+
+const WALL_HIT = new Audio();
+WALL_HIT.src = "sounds/wall.mp3";
+
+const LIFE_LOST = new Audio();
+LIFE_LOST.src = "sounds/life_lost.mp3";
+
+const PADDLE_HIT = new Audio();
+PADDLE_HIT.src = "sounds/paddle_hit.mp3";
+
+const WIN = new Audio();
+WIN.src = "sounds/win.mp3";
+
+const BRICK_HIT = new Audio();
+BRICK_HIT.src = "sounds/brick_hit.mp3";
+
 let paddle = {
   x: canvas.width / 2 - PADDLE_WIDTH / 2,
   y: canvas.height - PADDLE_MARGIN_BOTTOM - PADDLE_HEIGHT,
@@ -33,8 +60,8 @@ let ball = {
   x: canvas.width / 2,
   y: paddle.y - BALL_RADIUS,
   radius: BALL_RADIUS,
-  speed: 7,
-  dx: 3 * (Math.random() * 2 - 1),
+  speed: 6,
+  dx: 3,
   dy: -3,
 };
 
@@ -130,7 +157,7 @@ function ballPaddleCollision() {
 function resetGame() {
   ball.x = canvas.width / 2;
   ball.y = paddle.y - BALL_RADIUS;
-  ball.dx = 3 * (Math.random() * 2 - 1);
+  ball.dx = 3;
   ball.dy = -3;
   paddle = {
     x: canvas.width / 2 - PADDLE_WIDTH / 2,
@@ -222,6 +249,17 @@ function ballBrickCollision() {
   }
 }
 
+// show game stats
+function showGameStats(text, textX, textY, img, imgX, imgY) {
+  // draw text
+  canvasContext.fillStyle = "#FFF";
+  canvasContext.font = "25px Germania One";
+  canvasContext.fillText(text, textX, textY);
+
+  // draw image
+  canvasContext.drawImage(img, imgX, imgY, (width = 25), (height = 25));
+}
+
 // CONTROL THE PADDLE
 document.addEventListener("keydown", function (event) {
   const keyCode = event.code;
@@ -259,7 +297,8 @@ function levelUp() {
       GAME_OVER = true;
       return;
     }
-    LEVEL++;
+    LEVEL += 1;
+    brick.row = LEVEL;
     createBricks();
     ball.speed += 0.5;
     resetGame();
@@ -285,6 +324,8 @@ function draw() {
   drawPaddle();
   drawBall();
   drawBricks();
+
+  showGameStats(SCORE, 35, 25, SCORE_IMG, 5, 5);
 }
 
 function loop() {

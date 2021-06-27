@@ -14,7 +14,9 @@ body {
   width: 500px;
   height: 100vh;
   margin: 0 auto;
-  /* background-image: url(img/bg3.svg); */
+  background-image: url(img/bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 img {
