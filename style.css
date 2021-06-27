@@ -11,8 +11,20 @@ body {
 }
 
 .container {
-  width: 500px;
-  height: 90vh;
-  margin: 1em auto;
-  background-color: #fff;
+  width: 51vw;
+  height: 100vh;
+  margin: auto;
+  /* background-color: #fff; */
+}
+img {
+  /* width: 500px; */
+  height: 100vh;
+  position: absolute;
+  /* left: 31.7%; */
+  z-index: -1;
+  background-position: center;
+}
+canvas {
+  width: 51vw;
+  height: 100vh;
 }
