@@ -3,12 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <title>Brick Breaker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="container">
       <div class="brick-breaker">
-        <canvas id="game" width="500px" height="640px"></canvas>
+        <canvas id="game" width="500px" height="600px"></canvas>
+      </div>
+      <div class="pause-btn">
+        <img src="img/pause.svg" id="pause" alt="Pause Button" />
       </div>
     </div>
     <script src="index.js"></script>

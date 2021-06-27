@@ -3,13 +3,15 @@ const canvasContext = canvas.getContext("2d");
 
 canvas.style.border = "1px solid #0ff";
 
-canvasContext.lineWidth = 0.5;
+canvasContext.lineWidth = 2;
 
 // GAME VARIABLES AND CONSTANTS
 const PADDLE_WIDTH = 120;
 const PADDLE_MARGIN_BOTTOM = 50;
 const PADDLE_HEIGHT = 40;
-const BALL_RADIUS = 12;
+const BALL_RADIUS = 15;
+
+let isPaused = false;
 
 let LIFE = 3; // PLAYER HAS 3 LIVES
 let SCORE = 0;
@@ -32,6 +34,9 @@ LIFE_IMG.src = "img/life.png";
 
 const SCORE_IMG = new Image();
 SCORE_IMG.src = "img/score.png";
+
+const PAUSE_IMG = new Image();
+PAUSE_IMG.src = "img/pause.svg";
 
 const WALL_HIT = new Audio();
 WALL_HIT.src = "sounds/wall.mp3";
@@ -67,16 +72,9 @@ let ball = {
 
 // DRAW THE BALL
 function drawBall() {
-  canvasContext.beginPath();
-
-  canvasContext.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-  canvasContext.fillStyle = "#ffcd05";
-  canvasContext.fill();
-
-  canvasContext.strokeStyle = "#2e3548";
-  canvasContext.stroke();
-
-  canvasContext.closePath();
+  const ballImage = new Image();
+  ballImage.src = "./img/ball.png";
+  canvasContext.drawImage(ballImage, ball.x, ball.y, ball.radius, ball.radius);
 }
 
 // MOVE THE BALL
@@ -85,18 +83,11 @@ function moveBall() {
   ball.y += ball.dy;
 }
 
-// function drawPaddle() {
-//   canvasContext.fillStyle = "rgba(255, 99, 71, 1)";
-//   canvasContext.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-//   canvasContext.strokeStyle = "#000";
-//   canvasContext.strokeRect(paddle.x, paddle.y, paddle.width, paddle.height);
-// }
-
 function drawPaddle() {
-  var image2 = new Image();
-  image2.src = "./img/paddle.png";
+  const paddleImage = new Image();
+  paddleImage.src = "./img/paddle.png";
   canvasContext.drawImage(
-    image2,
+    paddleImage,
     paddle.x,
     paddle.y,
     paddle.width,
@@ -176,10 +167,19 @@ const brick = {
   height: 20,
   offSetLeft: 40,
   offSetTop: 20,
-  marginTop: 40,
+  marginTop: 50,
 };
 
 let bricks = [];
+
+const colors = [
+  "#ffffff",
+  "#ffffff",
+  "#4CEFFF",
+  "#029EFF",
+  "#35A7B2",
+  "#0E2F31",
+];
 
 function createBricks() {
   for (let r = 0; r < brick.row; r++) {
@@ -193,8 +193,8 @@ function createBricks() {
           brick.marginTop,
         status: true,
         strength: LEVEL,
-        fillColor: "#2e3548",
-        strokeColor: "yellow",
+        fillColor: colors[LEVEL],
+        strokeColor: "white",
       };
     }
   }
@@ -234,6 +234,7 @@ function ballBrickCollision() {
           ball.y - ball.radius < b.y + brick.height
         ) {
           b.strength -= 1;
+          b.fillColor = colors[b.strength];
           if (b.strength <= 0) {
             // BRICK_HIT.play();
             ball.dy = -ball.dy;
@@ -253,7 +254,7 @@ function ballBrickCollision() {
 function showGameStats(text, textX, textY, img, imgX, imgY) {
   // draw text
   canvasContext.fillStyle = "#FFF";
-  canvasContext.font = "25px Germania One";
+  canvasContext.font = "20px 'Press Start 2P'";
   canvasContext.fillText(text, textX, textY);
 
   // draw image
@@ -278,6 +279,22 @@ document.addEventListener("keyup", function (event) {
     rightArrow = false;
   }
 });
+
+// document.addEventListener("mousemove", function (event) {
+//   if (event.clientX + paddle.width > 200 && event.clientX < canvas.width)
+//     movePaddleWithMouse(event.clientX);
+// });
+
+// // MOVE PADDLE
+// function movePaddleWithMouse(changeX) {
+//   if (paddle.x >= 0 && paddle.x + paddle.width <= canvas.width) {
+//     paddle.x = changeX - paddle.width;
+//   } else if (paddle.x <= 0) {
+//     paddle.x = 1;
+//   } else if (paddle.x + paddle.width >= canvas.width) {
+//     paddle.x = canvas.width - paddle.width;
+//   }
+// }
 
 function levelUp() {
   let isLevelDone = true;
@@ -305,6 +322,14 @@ function levelUp() {
   }
 }
 
+// game over
+function gameOver() {
+  if (LIFE <= 0) {
+    showYouLose();
+    GAME_OVER = true;
+  }
+}
+
 function showYouWin() {
   setTimeout(() => {
     alert("Congrats!!");
@@ -326,14 +351,30 @@ function draw() {
   drawBricks();
 
   showGameStats(SCORE, 35, 25, SCORE_IMG, 5, 5);
+  showGameStats(LIFE, canvas.width - 25, 25, LIFE_IMG, canvas.width - 55, 5);
+  showGameStats(
+    LEVEL,
+    canvas.width / 2,
+    25,
+    LEVEL_IMG,
+    canvas.width / 2 - 30,
+    5
+  );
 }
 
 function loop() {
   // CLEAR THE CANVAS
   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
   draw();
-  update();
+  if (isPaused) {
+    update();
+  }
   requestAnimationFrame(loop);
 }
 
 loop();
+
+const pauseBtn = document.getElementById("pause");
+pauseBtn.addEventListener("click", () => {
+  isPaused = !isPaused;
+});
