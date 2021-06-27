@@ -53,11 +53,12 @@ body {
 
 #gameover {
   position: absolute;
-  width: 400px;
-  height: 500px;
-  background: rgba(0, 0, 0, 0.5);
+  width: 500px;
+  height: 600px;
+  background-image: url(img/canvas_background.gif);
   display: none;
 }
+
 #youwon {
   width: 100px;
   position: absolute;
@@ -66,7 +67,7 @@ body {
   display: none;
 }
 #youlose {
-  width: 400px;
+  width: 500px;
   position: absolute;
   top: 100px;
   left: 0px;

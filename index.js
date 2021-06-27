@@ -38,6 +38,15 @@ SCORE_IMG.src = "img/score.png";
 const PAUSE_IMG = new Image();
 PAUSE_IMG.src = "img/pause.svg";
 
+const strongBrickImage = new Image();
+strongBrickImage.src = "img/strength3.png";
+
+const midBrickImage = new Image();
+midBrickImage.src = "img/strength2.png";
+
+const normalBrickImage = new Image();
+normalBrickImage.src = "img/strength1.png";
+
 const WALL_HIT = new Audio();
 WALL_HIT.src = "sounds/wall.mp3";
 
@@ -52,6 +61,9 @@ WIN.src = "sounds/win.mp3";
 
 const BRICK_HIT = new Audio();
 BRICK_HIT.src = "sounds/brick_hit.mp3";
+
+const GAME_SONG = new Audio();
+GAME_SONG.src = "sounds/gameOn.mp3";
 
 let paddle = {
   x: canvas.width / 2 - PADDLE_WIDTH / 2,
@@ -118,7 +130,8 @@ function ballWallCollision() {
   if (ball.y + ball.radius >= canvas.height - PADDLE_MARGIN_BOTTOM) {
     LIFE--; // LOSE LIFE
     LIFE_LOST.play();
-    setTimeout(resetGame, 500);
+    resetGame();
+    // setTimeout(resetGame, 500);
   }
 }
 
@@ -172,6 +185,21 @@ const brick = {
   marginTop: 50,
 };
 
+const strongBrick = {
+  img: strongBrickImage,
+  strength: 3,
+};
+
+const midStrongBrick = {
+  img: midBrickImage,
+  strength: 2,
+};
+
+const normalBrick = {
+  img: normalBrickImage,
+  strength: 1,
+};
+
 let bricks = [];
 
 const colors = [
@@ -183,20 +211,66 @@ const colors = [
   "#0E2F31",
 ];
 
+const level1 = [
+  [3, 3, 3, 3, 3],
+  [1, 1, 1, 1, 1],
+  [2, 2, 2, 2, 2],
+  [1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1],
+];
+
+const level2 = [[1], [1, 2], [1, 2, 1], [1, 2, 1, 2], [3, 3, 2, 3, 2]];
+
+const level3 = [];
+
+const level4 = [];
+
+const level5 = [];
+
+function getCurrentLevelMatrix() {
+  switch (LEVEL) {
+    case 1:
+      return level1;
+    case 2:
+      return level2;
+    // case 3:
+    //   return level3;
+    // case 4:
+    //   return level4;
+    // case 5:
+    //   return level5;
+    default:
+      return level1;
+  }
+}
+
+function getCurrentBrickImage(num) {
+  switch (num) {
+    case 1:
+      return normalBrick.img;
+    case 2:
+      return midStrongBrick.img;
+    case 3:
+      return strongBrick.img;
+  }
+}
+
 function createBricks() {
-  for (let r = 0; r < brick.row; r++) {
-    bricks[r] = [];
-    for (let c = 0; c < brick.column; c++) {
-      bricks[r][c] = {
-        x: c * (brick.offSetLeft + brick.width) + brick.offSetLeft,
+  const levelMatrix = getCurrentLevelMatrix();
+
+  for (let row = 0; row < levelMatrix.length; row++) {
+    bricks[row] = [];
+    for (let col = 0; col < levelMatrix[row].length; col++) {
+      const currentBrickImage = getCurrentBrickImage(levelMatrix[row][col]);
+
+      bricks[row][col] = {
+        x: col * (brick.offSetLeft + brick.width) + brick.offSetLeft,
         y:
-          r * (brick.offSetTop + brick.height) +
+          row * (brick.offSetTop + brick.height) +
           brick.offSetTop +
           brick.marginTop,
-        status: true,
-        strength: LEVEL,
-        fillColor: colors[LEVEL],
-        strokeColor: "white",
+        strength: levelMatrix[row][col],
+        img: currentBrickImage,
       };
     }
   }
@@ -206,17 +280,13 @@ createBricks();
 
 // draw the bricks
 function drawBricks() {
-  for (let r = 0; r < brick.row; r++) {
-    for (let c = 0; c < brick.column; c++) {
-      let b = bricks[r][c];
-      // if the brick isn't broken
-      if (b.status) {
-        canvasContext.fillStyle = b.fillColor;
-        canvasContext.fillRect(b.x, b.y, brick.width, brick.height);
+  const levelMatrix = getCurrentLevelMatrix();
 
-        canvasContext.strokeStyle = b.strokeColor;
-
-        canvasContext.strokeRect(b.x, b.y, brick.width, brick.height);
+  for (let row = 0; row < levelMatrix.length; row++) {
+    for (let col = 0; col < levelMatrix[row].length; col++) {
+      let b = bricks[row][col];
+      if (b.strength > 0) {
+        canvasContext.drawImage(b.img, b.x, b.y, brick.width, brick.height);
       }
     }
   }
@@ -224,11 +294,12 @@ function drawBricks() {
 
 // ball brick collision
 function ballBrickCollision() {
-  for (let r = 0; r < brick.row; r++) {
-    for (let c = 0; c < brick.column; c++) {
+  const levelMatrix = getCurrentLevelMatrix();
+  for (let r = 0; r < levelMatrix.length; r++) {
+    for (let c = 0; c < levelMatrix[r].length; c++) {
       let b = bricks[r][c];
       // if the brick isn't broken
-      if (b.status) {
+      if (b.strength) {
         if (
           ball.x + ball.radius > b.x &&
           ball.x - ball.radius < b.x + brick.width &&
@@ -236,7 +307,7 @@ function ballBrickCollision() {
           ball.y - ball.radius < b.y + brick.height
         ) {
           b.strength -= 1;
-          b.fillColor = colors[b.strength];
+          b.img = getCurrentBrickImage(b.strength);
           if (b.strength <= 0) {
             BRICK_HIT.play();
             ball.dy = -ball.dy;
@@ -263,32 +334,14 @@ function showGameStats(text, textX, textY, img, imgX, imgY) {
   canvasContext.drawImage(img, imgX, imgY, (width = 25), (height = 25));
 }
 
-// CONTROL THE PADDLE
-document.addEventListener("keydown", function (event) {
-  const keyCode = event.code;
-  if (keyCode === "ArrowLeft" || keyCode === "KeyA") {
-    leftArrow = true;
-  } else if (keyCode === "ArrowRight" || keyCode === "KeyD") {
-    rightArrow = true;
-  }
-});
-
-document.addEventListener("keyup", function (event) {
-  const keyCode = event.code;
-  if (keyCode === "ArrowLeft" || keyCode === "KeyA") {
-    leftArrow = false;
-  } else if (keyCode === "ArrowRight" || keyCode === "KeyD") {
-    rightArrow = false;
-  }
-});
-
 function levelUp() {
   let isLevelDone = true;
+  const levelMatrix = getCurrentLevelMatrix();
 
   // check if all the bricks are broken
-  for (let r = 0; r < brick.row; r++) {
-    for (let c = 0; c < brick.column; c++) {
-      isLevelDone = isLevelDone && !bricks[r][c].status;
+  for (let r = 0; r < levelMatrix.length; r++) {
+    for (let c = 0; c < levelMatrix[r].length; c++) {
+      isLevelDone = isLevelDone && !bricks[r][c].strength;
     }
   }
 
@@ -316,19 +369,15 @@ function gameOver() {
   }
 }
 
-function showYouWin() {
-  setTimeout(() => {
-    alert("Congrats!!");
-  }, 1000);
-}
-
 function update() {
   movePaddle();
   moveBall();
   ballWallCollision();
   ballPaddleCollision();
   ballBrickCollision();
+  gameOver();
   levelUp();
+  GAME_SONG.play();
 }
 
 function draw() {
@@ -387,12 +436,13 @@ function audioManager() {
   BRICK_HIT.muted = BRICK_HIT.muted ? false : true;
   WIN.muted = WIN.muted ? false : true;
   LIFE_LOST.muted = LIFE_LOST.muted ? false : true;
+  GAME_SONG.muted = GAME_SONG.muted ? false : true;
 }
 
 // SHOW GAME OVER MESSAGE
 /* SELECT ELEMENTS */
 const gameover = document.getElementById("gameover");
-const youwin = document.getElementById("youwin");
+const youwin = document.getElementById("youwon");
 const youlose = document.getElementById("youlose");
 const restart = document.getElementById("restart");
 
@@ -404,7 +454,7 @@ restart.addEventListener("click", function () {
 // SHOW YOU WIN
 function showYouWin() {
   gameover.style.display = "block";
-  youwon.style.display = "block";
+  youwin.style.display = "block";
 }
 
 // SHOW YOU LOSE
@@ -412,6 +462,25 @@ function showYouLose() {
   gameover.style.display = "block";
   youlose.style.display = "block";
 }
+
+// CONTROL THE PADDLE
+document.addEventListener("keydown", function (event) {
+  const keyCode = event.code;
+  if (keyCode === "ArrowLeft" || keyCode === "KeyA") {
+    leftArrow = true;
+  } else if (keyCode === "ArrowRight" || keyCode === "KeyD") {
+    rightArrow = true;
+  }
+});
+
+document.addEventListener("keyup", function (event) {
+  const keyCode = event.code;
+  if (keyCode === "ArrowLeft" || keyCode === "KeyA") {
+    leftArrow = false;
+  } else if (keyCode === "ArrowRight" || keyCode === "KeyD") {
+    rightArrow = false;
+  }
+});
 
 // document.addEventListener("mousemove", function (event) {
 //   if (event.clientX + paddle.width > 200 && event.clientX < canvas.width)
