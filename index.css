@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   /* overflow: hidden; */
   background-image: url(img/background.png);
@@ -9,9 +13,15 @@ body {
   margin: 1em auto;
   background-image: url(img/bg4.svg);
   background-size: cover;
+  transition: all 1s ease-in;
+  position: relative;
+}
+
+#default-content {
   display: flex;
   flex-direction: column;
 }
+
 button {
   background: none;
   border: none;
@@ -32,11 +42,34 @@ button {
   width: 50px;
   margin-left: 80%;
   margin-top: 5%;
+  cursor: pointer;
 }
+
 .play {
   width: 100px;
   height: 100px;
   margin: auto;
   border: 1px solid white;
   border-radius: 50%;
+}
+
+#settings-container {
+  display: none;
+  width: 100%;
+  position: absolute;
+  color: #ffffff;
+  padding: 0 2em;
+  text-align: center;
+}
+
+.btn-container {
+  width: 100%;
+  margin: 2em 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+#music-btn,
+#settings-close {
+  cursor: pointer;
 }

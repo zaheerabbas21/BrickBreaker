@@ -5,23 +5,36 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="index.css" />
-    <title>Document</title>
+    <title>Brick Breaker Legacy</title>
   </head>
   <body>
-    <!-- <div class="game-start-btn">
-        <button class="settings-btn"><i class="fas fa-cog"></i></button>
-        <button onclick="alert('CAS')" class="play-btn">
-          <img class="play-btn-img" src="./img/play-btn.gif" alt="" />
-        </button>
-      </div> -->
     <div class="container">
-      <button class="settings">
-        <img class="settingsimg" src="img/setting.png" />
-      </button>
-      <img class="game-logo" src="img/1-2.png" />
-      <button class="play">
-        <a href="game.html"><img class="play-icon" src="img/playicon.svg" /></a>
-      </button>
+      <div id="default-content">
+        <button class="settings">
+          <img class="settingsimg" src="img/setting.png" id="setting" />
+        </button>
+        <img class="game-logo" src="img/1-2.png" />
+        <button class="play">
+          <a href="game.html"><img class="play-icon" src="img/play.png" /></a>
+        </button>
+      </div>
+
+      <div id="settings-container">
+        <div class="btn-container">
+          <button id="music-btn">
+            <img class="game-audio-btn" src="./img/music.png" alt="" />
+          </button>
+          <button id="settings-close">
+            <img src="./img/close.png" alt="" />
+          </button>
+        </div>
+
+        <div class="guide-container">
+          <h1 class="guide-title">How to play</h1>
+        </div>
+      </div>
     </div>
+
+    <script src="index.js"></script>
   </body>
 </html>
