@@ -354,7 +354,6 @@ function levelUp() {
       return;
     }
     LEVEL += 1;
-    brick.row = LEVEL;
     createBricks();
     ball.speed += 0.5;
     resetGame();
