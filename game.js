@@ -6,10 +6,11 @@ canvas.style.border = "1px solid #0ff";
 canvasContext.lineWidth = 2;
 
 // GAME VARIABLES AND CONSTANTS
-const PADDLE_WIDTH = 120;
+let PADDLE_WIDTH = 120;
 const PADDLE_MARGIN_BOTTOM = 50;
 const PADDLE_HEIGHT = 40;
-const BALL_RADIUS = 15;
+let BALL_RADIUS = 15;
+const POWER_UP_RADIUS = 30;
 
 let isPaused = true;
 
@@ -81,6 +82,58 @@ let ball = {
   dx: 3,
   dy: -3,
 };
+
+let powerUp1 = {
+  x: canvas.width / 4 - POWER_UP_RADIUS / 2,
+  y: paddle.y - canvas.width / 4,
+  radius: POWER_UP_RADIUS,
+  speed: 1,
+  dx: 0,
+  dy: 1,
+};
+
+let powerUp2 = {
+  x: (5 * canvas.width) / 6 - POWER_UP_RADIUS / 2,
+  y: paddle.y - canvas.width / 4,
+  radius: 30,
+  speed: 1,
+  dx: 0,
+  dy: 1,
+};
+
+function drawPowerUp1() {
+  const ballImage = new Image();
+  ballImage.src = "./img/powerUp1.png";
+  canvasContext.drawImage(
+    ballImage,
+    powerUp1.x,
+    powerUp1.y,
+    powerUp1.radius,
+    powerUp1.radius
+  );
+}
+
+function drawPowerUp2() {
+  const ballImage = new Image();
+  ballImage.src = "./img/ball.png";
+  canvasContext.drawImage(
+    ballImage,
+    powerUp2.x,
+    powerUp2.y,
+    powerUp2.radius,
+    powerUp2.radius
+  );
+}
+
+function movePowerUp1() {
+  powerUp1.x += powerUp1.dx;
+  powerUp1.y += powerUp1.dy;
+}
+
+function movePowerUp2() {
+  powerUp2.x += powerUp2.dx;
+  powerUp2.y += powerUp2.dy;
+}
 
 // DRAW THE BALL
 function drawBall() {
@@ -156,6 +209,80 @@ function ballPaddleCollision() {
 
     ball.dx = ball.speed * Math.sin(angle);
     ball.dy = -ball.speed * Math.cos(angle);
+  }
+}
+
+// POWERUP1 AND PADDLE COLLISION
+function powerUp1Collision() {
+  if (powerUp1.y > paddle.y + paddle.height) {
+    powerUp1.x = -1111100;
+    powerUp1.y = -11111100;
+  } else if (
+    powerUp1.x < paddle.x + paddle.width &&
+    powerUp1.x > paddle.x &&
+    paddle.y < paddle.y + paddle.height &&
+    powerUp1.y > paddle.y
+  ) {
+    PADDLE_HIT.play();
+
+    // CHECK WHERE THE BALL HIT THE PADDLE
+    let collidePoint = powerUp1.x - (paddle.x + paddle.width / 2);
+
+    // NORMALIZE THE VALUES
+    collidePoint = collidePoint / (paddle.width / 2);
+
+    // CALCULATE THE ANGLE OF THE BALL
+    let angle = (collidePoint * Math.PI) / 3;
+
+    PADDLE_WIDTH = 180;
+    paddle.width = 180;
+    powerUp1.x = -1111000;
+    powerUp1.y = -1111000;
+    powerUp1.dx = 0;
+    powerUp1.dy = 0;
+
+    setTimeout(() => {
+      PADDLE_WIDTH = 120;
+      paddle.width = 120;
+    }, 5000);
+  }
+}
+
+// POWERUP2 AND PADDLE COLLISION
+function powerUp2Collision() {
+  if (powerUp2.y > paddle.y + paddle.height) {
+    powerUp2.x = -1111100;
+    powerUp2.y = -11111100;
+  } else if (
+    powerUp2.x < paddle.x + paddle.width &&
+    powerUp2.x > paddle.x &&
+    paddle.y < paddle.y + paddle.height &&
+    powerUp2.y > paddle.y
+  ) {
+    PADDLE_HIT.play();
+
+    // CHECK WHERE THE BALL HIT THE PADDLE
+    let collidePoint = powerUp1.x - (paddle.x + paddle.width / 2);
+
+    // NORMALIZE THE VALUES
+    collidePoint = collidePoint / (paddle.width / 2);
+
+    // CALCULATE THE ANGLE OF THE BALL
+    let angle = (collidePoint * Math.PI) / 3;
+
+    BALL_RADIUS = 25;
+    ball.radius = 25;
+    powerUp2.x = -11100;
+    powerUp2.y = -111100;
+    powerUp2.dx = 0;
+    powerUp2.dy = 0;
+
+    console.log(BALL_RADIUS);
+
+    setTimeout(() => {
+      BALL_RADIUS = 15;
+      ball.radius = 15;
+    }, 5000);
   }
 }
 
@@ -399,9 +526,13 @@ function gameOver() {
 function update() {
   movePaddle();
   moveBall();
+  if (SCORE >= 150 && SCORE <= 200) movePowerUp2();
+  else if (SCORE >= 75 && SCORE <= 125) movePowerUp1();
   ballWallCollision();
   ballPaddleCollision();
   ballBrickCollision();
+  powerUp1Collision();
+  powerUp2Collision();
   gameOver();
   levelUp();
   GAME_SONG.play();
@@ -411,7 +542,8 @@ function draw() {
   drawPaddle();
   drawBall();
   drawBricks();
-
+  if (SCORE >= 150 && SCORE <= 200) drawPowerUp2();
+  else if (SCORE >= 75 && SCORE <= 125) drawPowerUp1();
   showGameStats(SCORE, 35, 25, SCORE_IMG, 5, 5);
   showGameStats(LIFE, canvas.width - 25, 25, LIFE_IMG, canvas.width - 55, 5);
   showGameStats(
