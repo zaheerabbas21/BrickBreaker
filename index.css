@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Iceland&family=Ranga&display=swap");
+
 * {
   box-sizing: border-box;
 }
@@ -6,6 +8,12 @@ body {
   /* overflow: hidden; */
   background-image: url(img/background.png);
   background-size: cover;
+  display: flex;
+
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  margin-top: 1%;
 }
 .container {
   width: 500px;
@@ -15,6 +23,7 @@ body {
   background-size: cover;
   transition: all 1s ease-in;
   position: relative;
+  border: 1px solid #0ff;
 }
 
 #default-content {
@@ -31,10 +40,10 @@ button {
   width: 250px;
 } */
 .game-logo {
-  width: 400px;
-  height: 400px;
+  width: 200px;
+  height: 200px;
   margin: auto;
-  margin-top: 0;
+  margin-top: 25px;
   margin-bottom: 0;
 }
 
@@ -46,20 +55,61 @@ button {
 }
 
 .play {
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
   margin: auto;
-  border: 1px solid white;
-  border-radius: 50%;
+  margin-top: 0;
+  /* border: 1px solid white;
+  border-radius: 50%; */
 }
-
+.play-icon {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 80px;
+}
 #settings-container {
   display: none;
-  width: 100%;
+  /* width: 100%; */
   position: absolute;
   color: #ffffff;
   padding: 0 2em;
-  text-align: center;
+  /* text-align: center; */
+  width: 90%;
+  height: 85%;
+  margin-left: 25px;
+  margin-top: 50px;
+  background: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(0.5px);
+  -webkit-backdrop-filter: blur(0.5px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  text-align: left;
+}
+
+p {
+  font-family: "Ranga", cursive;
+  /* line-height: 2; */
+  font-size: 25px;
+  margin: 0;
+}
+
+h1 {
+  margin: 30px 0 30px 0;
+  font-size: 35px;
+  font-family: "Iceland", cursive;
+}
+.guide-title {
+  display: inline-block;
+}
+.power {
+  margin: 20px 0 0 0;
+}
+
+.guide-container {
+  position: relative;
+  top: -100px;
+  z-index: -1;
 }
 
 .btn-container {
@@ -69,7 +119,44 @@ button {
   justify-content: space-between;
 }
 
-#music-btn,
 #settings-close {
   cursor: pointer;
+  margin-left: 80%;
+  width: 50px;
+  /* position:relative;
+  z-index: 100; */
+}
+
+.close-img {
+  position: relative;
+  left: 20px;
+}
+.arrowimg {
+  width: 100px;
+  margin-left: 35%;
+}
+.name {
+  width: 80%;
+  height: 80%;
+  margin: auto;
+}
+#music-btn {
+  cursor: pointer;
+  margin-left: 10px;
+  margin-top: 10px;
+  position: relative;
+  bottom: -15px;
+}
+
+.powerupsimg {
+  width: 100px;
+  position: relative;
+  bottom: -20px;
+  left: -15px;
+}
+.htp {
+  margin-top: 10px;
+}
+.pp {
+  margin: 0;
 }
