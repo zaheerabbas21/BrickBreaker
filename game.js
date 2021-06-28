@@ -220,10 +220,40 @@ const level1 = [
   [1, 1, 1, 1, 1],
 ];
 
- const level2 = [[3,3,3,3,3], [0,2,3,2,3], [0, 0,1,2, 3], [0,0,0, 1, 2],[0,0,0,0,1]];
- const level3 = [[0,0,1,0,0], [0,1,1,1,0], [1,1, 2, 1,1], [1, 2, 1, 2,1], [3, 3, 2, 3, 2],[3,0,0,0,3]];
- const level4= [[0,0,3,0,0],[0,3,2,3,0], [2,3,2,3,2], [3,2,1,2, 3], [0,3,2,3,0], [0, 0, 3, 0, 0]];
- const level5=[[3,0,0,0,3],[3,0,0,0,3],[3,2,0,2,3],[0,2,3,2,0],[0,2,2,2,0],[0,0,1,0,0],[3,3,3,3,3],[0,2,3,2,0],[0,0,2,0,0]];
+const level2 = [
+  [3, 3, 3, 3, 3],
+  [0, 2, 3, 2, 3],
+  [0, 0, 1, 2, 3],
+  [0, 0, 0, 1, 2],
+  [0, 0, 0, 0, 1],
+];
+const level3 = [
+  [0, 0, 1, 0, 0],
+  [0, 1, 1, 1, 0],
+  [1, 1, 2, 1, 1],
+  [1, 2, 1, 2, 1],
+  [3, 3, 2, 3, 2],
+  [3, 0, 0, 0, 3],
+];
+const level4 = [
+  [0, 0, 3, 0, 0],
+  [0, 3, 2, 3, 0],
+  [2, 3, 2, 3, 2],
+  [3, 2, 1, 2, 3],
+  [0, 3, 2, 3, 0],
+  [0, 0, 3, 0, 0],
+];
+const level5 = [
+  [3, 0, 0, 0, 3],
+  [3, 0, 0, 0, 3],
+  [3, 2, 0, 2, 3],
+  [0, 2, 3, 2, 0],
+  [0, 2, 2, 2, 0],
+  [0, 0, 1, 0, 0],
+  [3, 3, 3, 3, 3],
+  [0, 2, 3, 2, 0],
+  [0, 0, 2, 0, 0],
+];
 
 function getCurrentLevelMatrix() {
   switch (LEVEL) {
@@ -231,12 +261,12 @@ function getCurrentLevelMatrix() {
       return level1;
     case 2:
       return level2;
-    // case 3:
-    //   return level3;
-    // case 4:
-    //   return level4;
-    // case 5:
-    //   return level5;
+    case 3:
+      return level3;
+    case 4:
+      return level4;
+    case 5:
+      return level5;
     default:
       return level1;
   }
@@ -411,7 +441,11 @@ loop();
 
 const pauseBtn = document.getElementById("pause");
 pauseBtn.addEventListener("click", () => {
+  let imgSrc = pauseBtn.getAttribute("src");
+  console.log(imgSrc);
+  let PAUSE_IMG = imgSrc == "img/play.png" ? "img/pause.png" : "img/play.png";
   isPaused = !isPaused;
+  pauseBtn.setAttribute("src", PAUSE_IMG);
 });
 
 // SELECT SOUND ELEMENT
