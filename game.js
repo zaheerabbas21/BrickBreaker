@@ -11,7 +11,7 @@ const PADDLE_MARGIN_BOTTOM = 50;
 const PADDLE_HEIGHT = 40;
 const BALL_RADIUS = 15;
 
-let isPaused = false;
+let isPaused = true;
 
 let LIFE = 3; // PLAYER HAS 3 LIVES
 let SCORE = 0;
@@ -74,7 +74,7 @@ let paddle = {
 };
 
 let ball = {
-  x: canvas.width / 2,
+  x: canvas.width / 2 - BALL_RADIUS / 2,
   y: paddle.y - BALL_RADIUS,
   radius: BALL_RADIUS,
   speed: 6,
@@ -161,7 +161,8 @@ function ballPaddleCollision() {
 
 // RESET THE BALL
 function resetGame() {
-  ball.x = canvas.width / 2;
+  isPaused = true;
+  ball.x = canvas.width / 2 - BALL_RADIUS / 2;
   ball.y = paddle.y - BALL_RADIUS;
   ball.dx = 3;
   ball.dy = -3;
@@ -400,7 +401,7 @@ function loop() {
   // CLEAR THE CANVAS
   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
   draw();
-  if (isPaused) {
+  if (!isPaused) {
     update();
   }
 
@@ -467,8 +468,10 @@ document.addEventListener("keydown", function (event) {
   const keyCode = event.code;
   if (keyCode === "ArrowLeft" || keyCode === "KeyA") {
     leftArrow = true;
+    isPaused = false;
   } else if (keyCode === "ArrowRight" || keyCode === "KeyD") {
     rightArrow = true;
+    isPaused = false;
   }
 });
 
