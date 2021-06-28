@@ -31,7 +31,7 @@ const LEVEL_IMG = new Image();
 LEVEL_IMG.src = "img/level.png";
 
 const LIFE_IMG = new Image();
-LIFE_IMG.src = "img/life.png";
+LIFE_IMG.src = "img/ball.png";
 
 const SCORE_IMG = new Image();
 SCORE_IMG.src = "img/score.png";
@@ -308,7 +308,7 @@ const brick = {
   column: 5,
   width: 55,
   height: 20,
-  offSetLeft: 40,
+  offSetLeft: 37,
   offSetTop: 20,
   marginTop: 50,
 };
@@ -330,14 +330,6 @@ const normalBrick = {
 
 let bricks = [];
 
-const colors = [
-  "#ffffff",
-  "#ffffff",
-  "#4CEFFF",
-  "#029EFF",
-  "#35A7B2",
-  "#0E2F31",
-];
 //levels
 const level1 = [
   [3, 3, 3, 3, 3],
@@ -482,7 +474,7 @@ function ballBrickCollision() {
 function showGameStats(text, textX, textY, img, imgX, imgY) {
   // draw text
   canvasContext.fillStyle = "#FFF";
-  canvasContext.font = "20px 'Press Start 2P'";
+  canvasContext.font = "25px 'Iceland'";
   canvasContext.fillText(text, textX, textY);
 
   // draw image
@@ -588,8 +580,7 @@ soundElement.addEventListener("click", audioManager);
 function audioManager() {
   // CHANGE IMAGE SOUND_ON/OFF
   let imgSrc = soundElement.getAttribute("src");
-  let SOUND_IMG =
-    imgSrc == "img/SOUND_ON.png" ? "img/SOUND_OFF.png" : "img/SOUND_ON.png";
+  let SOUND_IMG = imgSrc == "img/music.png" ? "img/mute.png" : "img/music.png";
 
   soundElement.setAttribute("src", SOUND_IMG);
 
@@ -623,6 +614,7 @@ function showYouWin() {
 // SHOW YOU LOSE
 function showYouLose() {
   gameover.style.display = "block";
+  pauseBtn.style.display = "none";
   youlose.style.display = "block";
 }
 

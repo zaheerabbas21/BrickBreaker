@@ -48,11 +48,11 @@ canvas {
 }
 
 #sound {
-  width: 30px;
-  height: 30px;
+  width: 45px;
+  height: 45px;
   cursor: pointer;
   position: absolute;
-  top: 550px;
+  top: 567px;
   left: 15px;
 }
 
