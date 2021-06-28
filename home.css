@@ -1,0 +1,44 @@
+body {
+  /* overflow: hidden; */
+  background-image: url(img/background.png);
+  background-size: cover;
+}
+.container {
+  width: 500px;
+  height: 100vh;
+  margin: 0 auto;
+  background-image: url(img/bg4.svg);
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
+  /* overflow: hidden; */
+}
+button {
+  background: none;
+  border: none;
+  color: white;
+}
+/* img {
+  width: 250px;
+} */
+.game-logo {
+  width: 400px;
+  height: 400px;
+  margin: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.settingsimg {
+  width: 50px;
+  margin-left: 80%;
+  margin-top: 5%;
+}
+.play {
+  width: 100px;
+  height: 100px;
+  margin: auto;
+  border: 1px solid white;
+  border-radius: 50%;
+}
