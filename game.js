@@ -737,19 +737,3 @@ document.addEventListener("keyup", function (event) {
     rightArrow = false;
   }
 });
-
-// document.addEventListener("mousemove", function (event) {
-//   if (event.clientX + paddle.width > 200 && event.clientX < canvas.width)
-//     movePaddleWithMouse(event.clientX);
-// });
-
-// // MOVE PADDLE
-// function movePaddleWithMouse(changeX) {
-//   if (paddle.x >= 0 && paddle.x + paddle.width <= canvas.width) {
-//     paddle.x = changeX - paddle.width;
-//   } else if (paddle.x <= 0) {
-//     paddle.x = 1;
-//   } else if (paddle.x + paddle.width >= canvas.width) {
-//     paddle.x = canvas.width - paddle.width;
-//   }
-// }
